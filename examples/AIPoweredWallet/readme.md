@@ -1,4 +1,3 @@
-```markdown
 # AI Powered Wallet - Suspicious Transaction Detection
 
 This project demonstrates an AI-powered wallet designed to detect suspicious transactions using a pre-trained model.

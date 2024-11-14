@@ -1,6 +1,5 @@
 import { ethers, network, upgrades } from "hardhat";
 import { AIPoweredWallet } from "../typechain-types";
-import AIKernel from "../artifacts/contracts/AIPoweredWallet.sol/AIKernel.json";
 import { Address } from "hardhat-deploy/dist/types";
 import { assert } from "chai";
 
@@ -51,7 +50,7 @@ async function suspiciousTransaction() {
         inferResult = await aiPoweredWallet.fetchInferenceResult(inferId);
         break;
       } catch (e: any) {
-        console.log(e.message.slice(":")[1]);
+        console.log(e.message.split(": ")[1]);
         continue;
       }
     }
@@ -60,12 +59,16 @@ async function suspiciousTransaction() {
   console.log("Inference result: ", ethers.toUtf8String(inferResult));
   console.log("Send ETH after checking the transaction history...");
 
-  const txSend = await aiPoweredWallet.connect(sender).send(inferId, {
-    value: ethers.parseEther("0.0001"),
-  });
-  const receiptSend = await txSend.wait();
-  console.log("Tx hash: ", receiptSend?.hash);
-  console.log("Tx status: ", receiptSend?.status == 1 ? "Success" : "Failed");
+  try {
+    const txSend = await aiPoweredWallet.connect(sender).send(inferId, {
+      value: ethers.parseEther("0.0001"),
+    });
+    const receiptSend = await txSend.wait();
+    console.log("Tx hash: ", receiptSend?.hash);
+    console.log("Tx status: ", receiptSend?.status == 1 ? "Success" : "Failed");
+  } catch (e: any) {
+    console.log(e.message);
+  }
 }
 
 export function getInferId(receipt: ethers.TransactionReceipt): number[] {
