@@ -42,17 +42,12 @@ const config: HardhatUserConfig = {
       blockGasLimit: 1_000_000_000_000,
     },
     base_mainnet: {
-      url:
-        "https://base-mainnet.infura.io/v3/" +
-        process.env.BASE_MAINNET_INFURA_API_KEY,
+      url: process.env.BASE_MAINNET_RPC_URL || "",
       chainId: 8453,
-      accounts: [
-        process.env.BASE_MAINNET_PRIVATE_KEY_1,
-        process.env.BASE_MAINNET_PRIVATE_KEY_2,
-      ],
       promptSchedulerAddress: process.env.BASE_MAINNET_PROMPT_SCHEDULER_ADDRESS,
       aiKernelAddress: process.env.BASE_MAINNET_AI_KERNEL_ADDRESS,
       aiPoweredWallet: process.env.BASE_MAINNET_AI_POWERED_WALLET_ADDRESS,
+      receiverAddress: process.env.BASE_MAINNET_RECEIVER_ADDRESS,
       allowUnlimitedContractSize: true,
       ethNetwork: "https://testnet.runechain.com/rpc", // The Ethereum Web3 RPC URL.
       zksync: false,
