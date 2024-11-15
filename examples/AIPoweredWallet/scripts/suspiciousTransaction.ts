@@ -2,17 +2,36 @@ import { ethers, network, upgrades } from "hardhat";
 import { AIPoweredWallet } from "../typechain-types";
 import { Address } from "hardhat-deploy/dist/types";
 import { assert } from "chai";
+import { BaseWallet, JsonRpcProvider, SigningKey } from "ethers";
 
 const config = network.config as any;
 
 async function suspiciousTransaction() {
   const networkName = network.name.toUpperCase();
-  const [sender, receiver] = await ethers.getSigners();
+  const privateKey = process.env.BASE_MAINNET_PRIVATE_KEY;
+  const rpcUrl = process.env.BASE_MAINNET_RPC_URL;
 
+  assert(
+    privateKey,
+    `Missing ${networkName}_PRIVATE_KEY from environment variables!`
+  );
+  assert(rpcUrl, `Missing ${networkName}_RPC_URL from environment variables!`);
+
+  const sender = new BaseWallet(
+    new SigningKey(privateKey),
+    new JsonRpcProvider(rpcUrl)
+  );
   const aiPoweredWalletAddress = config.aiPoweredWallet;
+  const receiverAddress = process.env.BASE_MAINNET_RECEIVER_ADDRESS;
+
   assert(
     aiPoweredWalletAddress,
     `Missing ${networkName}_AI_POWERED_WALLET_ADDRESS from environment variables!`
+  );
+
+  assert(
+    receiverAddress,
+    `Missing ${networkName}_RECEIVER_ADDRESS from environment variables!`
   );
 
   const contractFactory = await ethers.getContractFactory("AIPoweredWallet");
@@ -25,11 +44,11 @@ async function suspiciousTransaction() {
   console.log(
     `Check whether the transaction history is suspicious when sending ${ethers.formatEther(
       transferredAmt
-    )} ETH from ${sender.address} to ${receiver.address}...`
+    )} ETH from ${sender.address} to ${receiverAddress}...`
   );
   const txCheck = await aiPoweredWallet
     .connect(sender)
-    .suspiciousTransaction(receiver.address, transferredAmt);
+    .suspiciousTransaction(receiverAddress, transferredAmt);
   const receipt = await txCheck.wait();
 
   console.log("Tx hash: ", receipt?.hash);
@@ -47,10 +66,12 @@ async function suspiciousTransaction() {
     while (true) {
       await sleep(30000);
       try {
-        inferResult = await aiPoweredWallet.fetchInferenceResult(inferId);
+        inferResult = await aiPoweredWallet
+          .connect(sender)
+          .fetchInferenceResult(inferId);
         break;
       } catch (e: any) {
-        console.log(e.message.split(": ")[1]);
+        console.log(e.message.split(": ")[1].split(" (")[0]);
         continue;
       }
     }
