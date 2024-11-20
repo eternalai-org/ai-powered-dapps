@@ -128,7 +128,7 @@ contract AIPoweredWallet {
 
         require(info.sender == msg.sender, "AIPoweredWallet: Unauthorized");
 
-        address receivedWallet = info.sender;
+        address receivedWallet = info.receiver;
         require(
             receivedWallet != address(0),
             "AIPoweredWallet: Invalid wallet address"
