@@ -16,6 +16,10 @@ interface AIKernel {
         bytes calldata _data,
         bool _flag
     ) external payable returns (uint256 referenceId);
+
+    function infer(
+        bytes calldata _data
+    ) external payable returns (uint256 referenceId);
 }
 
 interface PromptScheduler {
@@ -102,6 +106,28 @@ contract AIPoweredWallet {
         promptScheduler = _promptSchedulerAddress;
     }
 
+    function buildRequest(
+        string memory _prompt
+    ) public pure returns (string memory) {
+        string memory request = string.concat('{  "messages"');
+        request = string.concat(request, " :[");
+        request = string.concat(
+            request,
+            '{"role":"system","content":"You are a helpful assistant"},'
+        );
+        request = string.concat(request, '{"role":"user","content":"');
+        request = string.concat(request, _prompt);
+        request = string.concat(request, ' "}');
+        request = string.concat(request, "],");
+        request = string.concat(request, '"max_tokens":1024,');
+        request = string.concat(
+            request,
+            '"model":"PrimeIntellect/INTELLECT-1-Instruct"'
+        );
+        request = string.concat(request, "}");
+        return request;
+    }
+
     function suspiciousTransaction(
         address _receiver,
         uint256 _amount
@@ -117,10 +143,12 @@ contract AIPoweredWallet {
             context[msg.sender]
         );
 
-        uint256 inferenceId = AIKernel(kernel).infer(bytes(prompt), true);
+        string memory request = buildRequest(prompt);
+
+        uint256 inferenceId = AIKernel(kernel).infer(bytes(request));
         txInfo[inferenceId] = TxInfo(msg.sender, _receiver, _amount);
 
-        emit SuspiciousTransaction(inferenceId, bytes(prompt));
+        emit SuspiciousTransaction(inferenceId, bytes(request));
     }
 
     function send(uint256 _inferenceId) external payable {
@@ -141,11 +169,12 @@ contract AIPoweredWallet {
         bytes memory result = fetchInferenceResult(_inferenceId);
 
         require(
-            keccak256(result) == keccak256(abi.encodePacked("No")),
+            keccak256(result) == keccak256(abi.encodePacked("no")),
             "AIPoweredWallet: Suspicious transaction"
         );
 
-        payable(receivedWallet).transfer(msg.value);
+        (bool success, ) = payable(receivedWallet).call{value: msg.value}("");
+        require(success, "AIPoweredWallet: Transfer failed");
 
         context[msg.sender] = string.concat(
             context[msg.sender],

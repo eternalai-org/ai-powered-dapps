@@ -1,4 +1,4 @@
-import { ethers, network, upgrades } from "hardhat";
+import { ethers, network } from "hardhat";
 import { AIPoweredWallet } from "../typechain-types";
 import { Address } from "hardhat-deploy/dist/types";
 import { assert } from "chai";
@@ -8,38 +8,36 @@ const config = network.config as any;
 
 async function suspiciousTransaction() {
   const networkName = network.name.toUpperCase();
-  const privateKey = process.env.BASE_MAINNET_PRIVATE_KEY;
-  const rpcUrl = process.env.BASE_MAINNET_RPC_URL;
+  let privateKey = config.senderKey;
+  let rpcUrl = config.url;
+  let receiverAddress = config.receiverAddress;
+  const transferredAmt = config.transferredAmount as bigint;
+  const aiPoweredWalletAddress = config.aiPoweredWallet;
 
+  assert(
+    aiPoweredWalletAddress,
+    `Missing ${networkName}_AI_POWERED_WALLET_ADDRESS from environment variables!`
+  );
+  assert(
+    receiverAddress,
+    `Missing ${networkName}_RECEIVER_ADDRESS from environment variables!`
+  );
+  assert(
+    transferredAmt > 0n,
+    `Missing ${networkName}_TRANSFERRED_AMOUNT from environment variables!`
+  );
   assert(
     privateKey,
     `Missing ${networkName}_PRIVATE_KEY from environment variables!`
   );
   assert(rpcUrl, `Missing ${networkName}_RPC_URL from environment variables!`);
 
-  const sender = new BaseWallet(
-    new SigningKey(privateKey),
-    new JsonRpcProvider(rpcUrl)
-  );
-  const aiPoweredWalletAddress = config.aiPoweredWallet;
-  const receiverAddress = process.env.BASE_MAINNET_RECEIVER_ADDRESS;
-
-  assert(
-    aiPoweredWalletAddress,
-    `Missing ${networkName}_AI_POWERED_WALLET_ADDRESS from environment variables!`
-  );
-
-  assert(
-    receiverAddress,
-    `Missing ${networkName}_RECEIVER_ADDRESS from environment variables!`
-  );
+  const sender = await createWallet(privateKey, rpcUrl);
 
   const contractFactory = await ethers.getContractFactory("AIPoweredWallet");
   const aiPoweredWallet = contractFactory.attach(
     aiPoweredWalletAddress
   ) as AIPoweredWallet;
-
-  const transferredAmt = ethers.parseEther("0.0001");
 
   console.log(
     `Check whether the transaction history is suspicious when sending ${ethers.formatEther(
@@ -71,7 +69,8 @@ async function suspiciousTransaction() {
           .fetchInferenceResult(inferId);
         break;
       } catch (e: any) {
-        console.log(e.message.split(": ")[1].split(" (")[0]);
+        // console.log(e.message.split(": ")[1].split(" ()[0]);
+        console.log(e.message);
         continue;
       }
     }
@@ -82,7 +81,7 @@ async function suspiciousTransaction() {
 
   try {
     const txSend = await aiPoweredWallet.connect(sender).send(inferId, {
-      value: ethers.parseEther("0.0001"),
+      value: transferredAmt,
     });
     const receiptSend = await txSend.wait();
     console.log("Tx hash: ", receiptSend?.hash);
@@ -103,6 +102,18 @@ export function getInferId(receipt: ethers.TransactionReceipt): number[] {
     .map((log: any) => {
       return parseInt(log.topics[1], 16);
     });
+}
+
+async function createWallet(
+  privateKey: string,
+  rpcUrl: string
+): Promise<BaseWallet> {
+  const wallet = new BaseWallet(
+    new SigningKey(privateKey),
+    new JsonRpcProvider(rpcUrl)
+  );
+
+  return wallet;
 }
 
 function isAddressEq(a: Address, b: Address): boolean {

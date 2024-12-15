@@ -10,7 +10,7 @@ import "hardhat-contract-sizer";
 let localTestMnemonic =
   "test test test test test test test test test test test junk";
 const config: HardhatUserConfig = {
-  defaultNetwork: "hardhat",
+  defaultNetwork: "symbiosis_mainnet",
   solidity: {
     compilers: [
       {
@@ -44,13 +44,32 @@ const config: HardhatUserConfig = {
     base_mainnet: {
       url: process.env.BASE_MAINNET_RPC_URL || "",
       chainId: 8453,
+      senderKey: process.env.BASE_MAINNET_PRIVATE_KEY,
       promptSchedulerAddress: process.env.BASE_MAINNET_PROMPT_SCHEDULER_ADDRESS,
       aiKernelAddress: process.env.BASE_MAINNET_AI_KERNEL_ADDRESS,
       aiPoweredWallet: process.env.BASE_MAINNET_AI_POWERED_WALLET_ADDRESS,
       receiverAddress: process.env.BASE_MAINNET_RECEIVER_ADDRESS,
+      transferredAmount: process.env.BASE_MAINNET_TRANSFERRED_AMOUNT,
       allowUnlimitedContractSize: true,
       ethNetwork: "https://testnet.runechain.com/rpc", // The Ethereum Web3 RPC URL.
       zksync: false,
+      gasPrice: "auto",
+    } as any,
+    symbiosis_mainnet: {
+      url:
+        process.env.SYMBIOSIS_MAINNET_RPC_URL ||
+        "https://rpc.symbiosis.eternalai.org",
+      chainId: 45762,
+      senderKey: process.env.SYMBIOSIS_MAINNET_PRIVATE_KEY,
+      promptSchedulerAddress:
+        process.env.SYMBIOSIS_MAINNET_PROMPT_SCHEDULER_ADDRESS,
+      aiKernelAddress: process.env.SYMBIOSIS_MAINNET_AI_KERNEL_ADDRESS,
+      aiPoweredWallet: process.env.SYMBIOSIS_MAINNET_AI_POWERED_WALLET_ADDRESS,
+      receiverAddress: process.env.SYMBIOSIS_MAINNET_RECEIVER_ADDRESS,
+      transferredAmount: process.env.SYMBIOSIS_MAINNET_TRANSFERRED_AMOUNT,
+      allowUnlimitedContractSize: true,
+      ethNetwork: "https://testnet.runechain.com/rpc", // The Ethereum Web3 RPC URL.
+      zksync: true,
       gasPrice: "auto",
     } as any,
   },
