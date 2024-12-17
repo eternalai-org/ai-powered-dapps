@@ -133,7 +133,7 @@ contract AIPoweredWallet {
         uint256 _amount
     ) external {
         string memory prompt = string.concat(
-            "Based on the following Ethereum transaction history, is there any indication of suspicious activity? Respond with only 'yes' or 'no'. ",
+            "Assess the following Ethereum transaction history for any suspicious patterns. Respond with 'yes' if there is ANY indication of unusual or potentially malicious activity, however slight. Respond with 'no' ONLY if the transaction history is completely clean and normal. Your answer must be one word only. ",
             Strings.toHexString(msg.sender),
             " transfer ",
             Strings.toString(_amount),
