@@ -19,6 +19,7 @@ type Move = string; // e.g., 'e4', 'Nf3', 'Qh5'
 
 // Function to print the board
 export function printBoard(board: Board) {
+  console.log("\n");
   console.log("   a  b  c  d  e  f  g  h");
   for (let row = 7; row >= 0; row--) {
     let rowString = `${row + 1} `;
@@ -27,6 +28,7 @@ export function printBoard(board: Board) {
     }
     console.log(rowString);
   }
+  console.log("\n");
 }
 
 function validateMove(move: Move, board: Board, isWhiteTurn: boolean): boolean {
@@ -233,7 +235,7 @@ export let currentBoard: Board = [
 // Game Loop (Example)
 let whiteTurn = true;
 
-export function gameLoop(move: string) {
+export function gameMove(move: string) {
   currentBoard = processMove(move.trim(), currentBoard, whiteTurn);
   whiteTurn = !whiteTurn;
 }
