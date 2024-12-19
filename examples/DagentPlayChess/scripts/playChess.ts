@@ -3,6 +3,7 @@ import { DagentPlayChess } from "../typechain-types";
 import { Address } from "hardhat-deploy/dist/types";
 import { assert } from "chai";
 import { BaseWallet, JsonRpcProvider, SigningKey } from "ethers";
+import { gameLoop, printBoard, Board } from "./processBoard";
 
 const config = network.config as any;
 
@@ -35,11 +36,12 @@ async function main() {
   // await clearGame(aiPoweredDagent, player);
 
   await createGame(aiPoweredDagent, player);
+  printBoard(currentBoard);
 
-  await playChess(aiPoweredDagent, player, "b2-b4");
-  await waitToGetDagentMove(aiPoweredDagent, player);
-  await playChess(aiPoweredDagent, player, "Nb1-c3");
-  await waitToGetDagentMove(aiPoweredDagent, player);
+  gameLoop(await playChess(aiPoweredDagent, player, "b2-b4"));
+  gameLoop(await waitToGetDagentMove(aiPoweredDagent, player));
+  gameLoop(await playChess(aiPoweredDagent, player, "Nb1-c3"));
+  gameLoop(await waitToGetDagentMove(aiPoweredDagent, player));
 }
 
 export async function createGame(
@@ -98,6 +100,7 @@ async function playChess(
   } catch (e: any) {
     console.log(e.message);
   }
+  return move;
 }
 
 export async function waitToGetDagentMove(
@@ -128,7 +131,9 @@ export async function waitToGetDagentMove(
       continue;
     }
   }
-  console.log("Dagent move: ", ethers.toUtf8String(inferResult));
+  const move = ethers.toUtf8String(inferResult);
+  console.log("Dagent move: ", move);
+  return move;
 }
 
 export async function clearGame(
@@ -170,6 +175,17 @@ function isAddressEq(a: Address, b: Address): boolean {
 async function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+export let currentBoard: Board = [
+  ["r", "n", "b", "q", "k", "b", "n", "r"],
+  ["p", "p", "p", "p", "p", "p", "p", "p"],
+  [".", ".", ".", ".", ".", ".", ".", "."],
+  [".", ".", ".", ".", ".", ".", ".", "."],
+  [".", ".", ".", ".", ".", ".", ".", "."],
+  [".", ".", ".", ".", ".", ".", ".", "."],
+  ["P", "P", "P", "P", "P", "P", "P", "P"],
+  ["R", "N", "B", "Q", "K", "B", "N", "R"],
+];
 
 main()
   .then(() => process.exit(0))
