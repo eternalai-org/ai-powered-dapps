@@ -1,0 +1,32 @@
+{
+    "base_mainnet": {
+        "promptSchedulerAddress": "0xA1d2F74C345Ff1d97B8FC72E061903cD84C66F69",
+        "models": [
+            {
+                "modelName": "LLAMA1",
+                "modelAddress": "0x9A35863BaF0df7623F34FCF3376CDBAC8581E76b",
+                "description": "UniverseDagents"
+            },
+            {
+                "modelName": "LLAMA1",
+                "modelAddress": "0x643C45e89769a16bcB870092bD1eFE4696Cb2ce7",
+                "description": "UniverseDagents"
+            }
+        ]
+    },
+    "symbiosis_mainnet": {
+        "promptSchedulerAddress": "0x87e9B8630c1E20dd86451AE15aF7663D006f089c",
+        "models": [
+            {
+                "modelName": "unsloth/Llama-3.3-70B-Instruct-bnb-4bit",
+                "modelAddress": "0xdBb2CDdbD9fe47Cc1971dF416d2A18D8c344222d",
+                "description": "UniverseDagents"
+            },
+            {
+                "modelName": "DeepSeek V3",
+                "modelAddress": "0xD953b8f1DF45277c34e9e098E99d8F9922eAB030",
+                "description": "UniverseDagents"
+            }
+        ]
+    }
+}
