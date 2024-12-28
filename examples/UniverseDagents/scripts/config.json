@@ -8,8 +8,8 @@
                 "description": "UniverseDagents"
             },
             {
-                "modelName": "LLAMA1",
-                "modelAddress": "0x643C45e89769a16bcB870092bD1eFE4696Cb2ce7",
+                "modelName": "DeepSeek V3",
+                "modelAddress": "0xfC2875Ac6148aaf332e2991A27b4f0251807759A",
                 "description": "UniverseDagents"
             }
         ]
