@@ -6,7 +6,8 @@
     "hh:test": "npx hardhat test",
     "hh:size": "hardhat size-contracts",
     "sendUniverseAgentRequest:base_mainnet": "npx hardhat run scripts/sendUniverseAgentRequest.ts --network base_mainnet",
-    "sendUniverseAgentRequest:symbiosis_mainnet": "npx hardhat run scripts/sendUniverseAgentRequest.ts --network symbiosis_mainnet"
+    "sendUniverseAgentRequest:symbiosis_mainnet": "npx hardhat run scripts/sendUniverseAgentRequest.ts --network symbiosis_mainnet",
+    "sendUniverseAgentRequest:abstract_testnet": "npx hardhat run scripts/sendUniverseAgentRequest.ts --network abstract_testnet"
   },
   "devDependencies": {
     "@ericxstone/hardhat-blockscout-verify": "^1.0.2",

@@ -61,6 +61,16 @@ const config: HardhatUserConfig = {
       zksync: true,
       gasPrice: "auto",
     } as any,
+    abstract_testnet: {
+      url: process.env.RPC_URL || "https://api.testnet.abs.xyz",
+      chainId: 11124,
+      senderKey: process.env.PRIVATE_KEY,
+      promptSchedulerAddress: process.env.PROMPT_SCHEDULER_ADDRESS,
+      allowUnlimitedContractSize: true,
+      ethNetwork: "https://testnet.runechain.com/rpc", // The Ethereum Web3 RPC URL.
+      zksync: true,
+      gasPrice: "auto",
+    } as any,
   },
   namedAccounts: {
     deployer: 0,

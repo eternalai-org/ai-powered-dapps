@@ -207,9 +207,11 @@ async function tryToGetInferenceResult(
     )) as unknown as IPromptScheduler3TX;
 
     let result = (await ins.getInferenceInfo(inferId))[10];
-    if (result.length == 0) {
+    if (result === undefined || result == "0x") {
       throw new Error("Inference result not ready");
     }
+
+    return result;
   }
 }
 
