@@ -7,7 +7,8 @@
     "hh:size": "hardhat size-contracts",
     "deploy:base_mainnet": "npx hardhat run scripts/deployAIPoweredWallet.ts --network base_mainnet",
     "suspiciousTransaction:base_mainnet": "npx hardhat run scripts/suspiciousTransaction.ts --network base_mainnet",
-    "suspiciousTransaction:symbiosis_mainnet": "npx hardhat run scripts/suspiciousTransaction.ts --network symbiosis_mainnet"
+    "suspiciousTransaction:symbiosis_mainnet": "npx hardhat run scripts/suspiciousTransaction.ts --network symbiosis_mainnet",
+    "suspiciousTransactionV2:abstract_testnet": "npx hardhat run scripts/suspiciousTransactionV2.ts --network abstract_testnet"
   },
   "devDependencies": {
     "@ericxstone/hardhat-blockscout-verify": "^1.0.2",
