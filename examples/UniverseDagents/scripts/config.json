@@ -33,5 +33,15 @@
                 "description": "UniverseDagents"
             }
         ]
+    },
+    "subtensor_mainnet": {
+        "promptSchedulerAddress": "0x0A77958AB03E60a7e939f660D4cdC8862Ae0e966",
+        "models": [
+            {
+                "modelName": "unsloth/Llama-3.3-70B-Instruct-bnb-4bit",
+                "modelAddress": "0xC47E14AC0ea793e25e9644b555cb5902423F78E7",
+                "description": "UniverseDagents"
+            }
+        ]
     }
 }
