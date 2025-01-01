@@ -34,7 +34,7 @@
             }
         ]
     },
-    "subtensor_mainnet": {
+    "bittensor_mainnet": {
         "promptSchedulerAddress": "0x0A77958AB03E60a7e939f660D4cdC8862Ae0e966",
         "models": [
             {

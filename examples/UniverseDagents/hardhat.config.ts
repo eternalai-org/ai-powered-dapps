@@ -72,7 +72,7 @@ const config: HardhatUserConfig = {
       gasPrice: "auto",
     } as any,
     bittensor_mainnet: {
-      url: process.env.RPC_URL || "https://evm-subtensor.eternalai.org",
+      url: process.env.RPC_URL || "https://bittensor.eternalai.org",
       chainId: 964,
       senderKey: process.env.PRIVATE_KEY,
       promptSchedulerAddress: process.env.PROMPT_SCHEDULER_ADDRESS,
