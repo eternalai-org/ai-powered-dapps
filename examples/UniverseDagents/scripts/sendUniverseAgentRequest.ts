@@ -57,7 +57,9 @@ async function sendUniverseAgentRequest() {
   console.log("Sending inference request...");
   const txRequest = await modelInstance
     .connect(sender)
-    ["infer(bytes)"](ethers.toUtf8Bytes(JSON.stringify(request)));
+    ["infer(bytes)"](ethers.toUtf8Bytes(JSON.stringify(request)), {
+      gasPrice: ethers.parseUnits("10", "gwei"),
+    });
   const receipt = await txRequest.wait();
   console.log("Tx hash: ", receipt?.hash);
   console.log("Tx status: ", receipt?.status == 1 ? "Success" : "Failed");

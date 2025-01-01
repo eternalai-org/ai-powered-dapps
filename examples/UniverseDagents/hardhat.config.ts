@@ -71,6 +71,16 @@ const config: HardhatUserConfig = {
       zksync: true,
       gasPrice: "auto",
     } as any,
+    bittensor_mainnet: {
+      url: process.env.RPC_URL || "https://evm-subtensor.eternalai.org",
+      chainId: 964,
+      senderKey: process.env.PRIVATE_KEY,
+      promptSchedulerAddress: process.env.PROMPT_SCHEDULER_ADDRESS,
+      allowUnlimitedContractSize: true,
+      ethNetwork: "https://testnet.runechain.com/rpc", // The Ethereum Web3 RPC URL.
+      zksync: false,
+      gasPrice: "auto",
+    },
   },
   namedAccounts: {
     deployer: 0,
